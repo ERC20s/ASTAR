@@ -23,7 +23,7 @@ logo.addComponent(
     openExternalURL("https://plasm.network")
   },
     { hoverText: "Visit the astar website to learn more)",
-    distance: 30, }
+    distance: 230, }
 )
 )
 
@@ -53,7 +53,7 @@ polkadot.addComponent(
     payment()
   },
     { hoverText: "Send ETH and recieve wETH on shiden network. (NOT ACTUALLY WORKING)",
-    distance: 30, }
+    distance: 230, }
 )
 )
 
@@ -79,7 +79,7 @@ executeTask(async () => {
 })
   },
     { hoverText: "Click here to receive a free wearable on SHIDEN",
-    distance: 30, }
+    distance: 220, }
 )
 )
 
