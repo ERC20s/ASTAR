@@ -8,4 +8,4 @@
 
   cd /ASTAR
   
-  dcl start
+  dcl start --web3
