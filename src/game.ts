@@ -45,7 +45,7 @@ engine.addSystem(new SimpleRotate())
 const polkadot = new Entity();
 engine.addEntity(polkadot);
 polkadot.addComponent(new GLTFShape("models/eth.glb"));
-polkadot.addComponent(new Transform({ position: new Vector3(75, 0, 5) }));
+polkadot.addComponent(new Transform({ position: new Vector3(75, 0, 5), scale: new Vector3(4, 4, 4)  }));
 
 polkadot.addComponent(
   new OnPointerDown(() => {
@@ -60,7 +60,7 @@ polkadot.addComponent(
 const ethswap = new Entity();
 engine.addEntity(ethswap);
 ethswap.addComponent(new GLTFShape("models/sdn.glb"));
-ethswap.addComponent(new Transform({ position: new Vector3(55, 0, 5) }));
+ethswap.addComponent(new Transform({ position: new Vector3(55, 0, 5), scale: new Vector3(4, 4, 4)  }));
 
 ethswap.addComponent(
   new OnPointerDown(() => {
