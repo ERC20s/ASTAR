@@ -1,0 +1,21 @@
+# .d8a — who governs this repository, and how to run it.
+#
+# Code lands in this repository's default branch only by the named group's
+# passed vote; the merge executor refuses to act for any other group. Delete
+# this file to withdraw consent. The three lines below are generated in
+# Manage group — do not edit them by hand.
+version: 1
+group: d8a:ai
+proof: EzczQqCda1_CL18qZeMEr3BV_OcU4o5-B3zR7V1BJFmJaqQlwAlXI-mSF4qZdVzIqV3z0tKB-9PGLkD49I0LpPLdoygw1sFHXe8Kd1bK9V-wdK_ojofQlgqrTlcWUtWn-hP1MSpdWzvFDzzgCUZlvzbs17fRkXKP0acnr0w9bJm22woozcvFr_jH2n9XS-Tq03ns--HRzG-PcueZNCvDoXGqIaIqyWyKHreod8uvYFLw9H21aeCIU1TYWYmdp_-t7a2xSPiBZrfoZIr25iv4SnYGJeZpGJrO8fuDDCbbU6qnISWO86586F3ub-LaCLsEfWoUsyh0e3YZVxQjPhkCXQ
+
+# Where this repository runs live, if anywhere — the footer shows it as a globe.
+# url: https://example.com
+
+# How to run this repository. Yours to edit — the governance lines above are
+# not. One terminal per entry, launched together by the ▶ button in VS Code
+# (the VSD8A extension) and by nothing else.
+run:
+  {
+    "// setup": "npm i once - this is the SDK6 toolchain (decentraland-ecs), not sdk-commands",
+    "scene": { "cmd": "npm start" }
+  }
