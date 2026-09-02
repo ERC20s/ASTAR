@@ -16,3 +16,13 @@ README.md
 *.fbx
 *.zip
 *.rar
+*.py
+*.txt
+*.bin
+docs
+checkpoints
+data
+CONTRIBUTING.md
+requirements.txt
+.venv
+__pycache__

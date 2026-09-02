@@ -1,0 +1,70 @@
+ASTAR SAMPLE CORPUS
+
+This file exists so that a contributor can run the whole pipeline end to end on
+a laptop, with no downloads, within minutes. It is a smoke-test corpus, not a
+training set: a model trained on it will learn the shape of English words and
+nothing more. Replace it with a real corpus by passing --source to the data
+preparation script.
+
+The group is building an AI project from scratch. From scratch means the
+weights start at random initialisation, the tokenizer is written in this
+repository, the training loop is written in this repository, and no pretrained
+checkpoint is downloaded from anywhere. The point is to own the whole path from
+raw text to sampled text.
+
+The model is a decoder-only transformer. Text is turned into tokens. Tokens are
+turned into vectors by an embedding table. A learned positional embedding tells
+the model where in the window each token sits. Then a stack of blocks runs.
+Each block normalises its input, attends over every earlier position, adds the
+result back to the residual stream, normalises again, runs a two layer feed
+forward network, and adds that back too. At the end a final normalisation and a
+linear head produce a score for every symbol in the vocabulary.
+
+Attention is the part that mixes information across positions. Each head
+projects the residual stream into queries, keys and values. The query at one
+position is compared against the keys at every position that came before it.
+The comparison is scaled by the square root of the head dimension so that the
+scores do not grow with width. A causal mask sets the score of every future
+position to negative infinity, so the model can never read ahead of itself. The
+scores become probabilities through a softmax, and those probabilities weight
+the values. The heads are concatenated and projected back.
+
+Training is a loop. Draw a batch of random windows from the corpus. Shift each
+window by one token to make the targets. Run the model. Compare the predicted
+distribution against the targets with a cross entropy loss. Backpropagate. Clip
+the gradient norm so that a single bad batch cannot wreck the run. Step the
+optimiser. Decay the learning rate. Every so often, stop and measure the loss on
+a held out slice of the corpus that the model never trains on, and write a
+checkpoint whenever that held out loss improves.
+
+The held out loss is the honest number. Training loss always falls; validation
+loss falling with it is what says the model is learning the language rather than
+memorising the sample. If validation loss turns upward while training loss keeps
+dropping, the model is overfitting and the run should stop, or the corpus should
+grow, or the model should shrink.
+
+Sampling is the reverse trip. Start from a prompt. Encode it to tokens. Run the
+model on the last window of tokens. Take the scores at the final position,
+divide them by a temperature, optionally keep only the top few, turn them into
+probabilities, and draw one token. Append it and repeat. A low temperature makes
+the model repetitive and safe. A high temperature makes it inventive and wrong.
+
+Scaling is a configuration change, not a rewrite. Widen the embedding, add
+layers, add heads, lengthen the context window, and the same code trains a
+larger model on a larger corpus. What changes is the compute bill and the amount
+of text required to fill the extra capacity. A model that is too large for its
+corpus will memorise; a corpus that is too large for its model will be underfit.
+The group should scale both together, and should say in a proposal what compute
+and what data a scale step assumes.
+
+Honesty about limits belongs in the repository, not only in the meeting. This
+project does not yet have the compute or the data of a frontier laboratory. What
+it has is a complete, readable, from scratch implementation that runs today, a
+written architecture, a reproducible environment, and a governance process that
+records every change. Those are the things that compound. The rest is time,
+text, and hardware.
+
+Every symbol in this file is a byte, and every byte is a token. The tokenizer is
+that simple on purpose: it has no vocabulary file to build, ship or version, it
+never fails on unusual characters, and it can be swapped for a byte pair
+encoding later behind exactly the same encode and decode functions.

@@ -1,0 +1,8 @@
+# Python environment and build artefacts for the AI project
+.venv/
+__pycache__/
+*.py[cod]
+
+# Training artefacts
+checkpoints/
+data/*.bin

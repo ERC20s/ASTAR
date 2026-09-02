@@ -17,5 +17,6 @@ proof: EzczQqCda1_CL18qZeMEr3BV_OcU4o5-B3zR7V1BJFmJaqQlwAlXI-mSF4qZdVzIqV3z0tKB-
 run:
   {
     "// setup": "npm i once - this is the SDK6 toolchain (decentraland-ecs), not sdk-commands",
-    "scene": { "cmd": "npm start" }
+    "scene": { "cmd": "npm start", "port": 8000 },
+    "// ai:train": { "cmd": "npm run ai:train" }
   }
