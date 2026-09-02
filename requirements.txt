@@ -1,0 +1,8 @@
+# Python dependencies for the ASTAR AI project (see docs/ARCHITECTURE.md).
+# The Decentraland scene does not use any of these; it is built with npm.
+#
+#   python -m venv .venv && . .venv/bin/activate
+#   pip install -r requirements.txt
+
+torch>=2.0,<3.0
+numpy>=1.24,<3.0

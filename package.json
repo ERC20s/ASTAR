@@ -8,7 +8,10 @@
     "watch": "build-ecs --watch",
     "deploy:now": "dcl export && now export",
     "ecs:install": "npm install --save-dev decentraland-ecs@latest",
-    "ecs:install-next": "npm install --save-dev decentraland-ecs@next"
+    "ecs:install-next": "npm install --save-dev decentraland-ecs@next",
+    "ai:prepare": "python -m src.data.dataset --source src/data/sample_corpus.txt --out data/corpus.bin",
+    "ai:train": "python -m src.train --data data/corpus.bin --preset tiny",
+    "ai:generate": "python -m src.generate --tokens 200"
   },
   "devDependencies": {
     "decentraland-ecs": "latest"
