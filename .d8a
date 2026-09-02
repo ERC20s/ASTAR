@@ -17,5 +17,7 @@ proof: EzczQqCda1_CL18qZeMEr3BV_OcU4o5-B3zR7V1BJFmJaqQlwAlXI-mSF4qZdVzIqV3z0tKB-
 run:
   {
     "// setup": "npm i once - this is the SDK6 toolchain (decentraland-ecs), not sdk-commands",
-    "scene": { "cmd": "npm start" }
+    "scene": { "cmd": "npm start" },
+    "// ai:test": "npm run ai:test - gradient + loss-decrease checks, seconds, exits non-zero on failure",
+    "// train": "npm run train - trains the ai/ baseline and writes ai/checkpoints/baseline.json; finishes and exits, so it is left switched off"
   }

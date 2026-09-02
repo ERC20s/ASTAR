@@ -1,0 +1,66 @@
+ASTAR baseline corpus.
+
+This file is the placeholder dataset for the ASTAR language model. It exists so
+that anybody who clones the repository can run a full training loop in seconds
+without downloading anything. Replace it, or point the trainer somewhere else
+with `npm run train -- --data path/to/corpus.txt`. The expected format is one
+plain UTF-8 text file; the loader reads it as a stream of characters, builds the
+vocabulary from the characters it finds, and slices fixed-length windows out of
+it. No other structure is assumed, so any prose, log, transcript or code dump
+can be dropped in unchanged.
+
+The group is building a model from scratch. That means the first thing to get
+right is not scale, it is the loop: read data, build a vocabulary, embed the
+context, run a forward pass, compute a loss, run a backward pass, take an
+optimiser step, measure the loss on data the model has not seen, save a
+checkpoint, sample from the checkpoint. Every one of those steps is small enough
+to read in an afternoon, and each one is a place where a bug can hide for weeks
+if nothing checks it. The smoke test compares the analytic gradients against
+numeric gradients, because a wrong backward pass still trains, just badly, and
+that is the most expensive kind of mistake to discover late.
+
+A character-level model on a corpus this small will not say anything wise. What
+it will do is prove that the pipeline is wired end to end. The loss starts near
+the logarithm of the vocabulary size, which is what a model that has learned
+nothing scores, and it should fall steadily from there. If it does not fall, the
+run is broken, and the training script says so and exits non-zero rather than
+quietly writing a useless checkpoint.
+
+Scaling comes later and it comes in the same order every time. First a better
+tokenizer, so that a token carries more than one character of meaning. Then a
+context window long enough for the model to use what it read a paragraph ago.
+Then attention in place of a single concatenated context, so the model can weigh
+the tokens it looked at rather than treating each position as its own slab of
+parameters. Then more data, which is usually worth more than more layers. Then,
+and only then, more parameters and the compute to feed them.
+
+The interface is what the group should hold stable while all that changes. A
+model exposes a forward pass over a batch of contexts, a loss, a backward pass
+that accumulates gradients, a list of parameter tensors, and a way to save and
+load itself. The trainer knows nothing else about it. The data module hands out
+integer token ids and a vocabulary size and nothing else. Swap a transformer in
+behind those two boundaries and the training script does not change at all.
+
+Reproducibility matters more than it looks. Every random draw in this project
+comes from a seeded generator: the weight initialisation, the batch sampling and
+the sampling of generated text. Two people running the same command with the
+same seed on the same corpus get the same numbers, so a claim about a run is a
+claim somebody else can check. When a change makes the loss go down, the group
+can tell whether that was the change or the shuffle.
+
+Compute is a shared cost, so the defaults are deliberately modest: a few hundred
+steps, a small hidden layer, a context of a handful of characters, all of it on
+the CPU. A contributor who wants a bigger run passes bigger numbers on the
+command line rather than committing them, and reports the seed and the flags
+alongside the loss curve.
+
+The scene in this repository is a Decentraland build for the ASTAR event and it
+is untouched by any of this. The AI work lives in its own folder, is ignored by
+the scene bundler, and adds no runtime dependency to the scene. Anything the
+model eventually produces has to be carried across a clear boundary, never by
+importing training code into the scene.
+
+Good engineering here looks boring on purpose. Small files. Explicit maths. A
+test that fails loudly. A checkpoint that reloads to the same predictions it was
+saved with. A corpus you can read. That is the ground everything larger is going
+to stand on, and it is cheap to fix now and expensive to fix later.
